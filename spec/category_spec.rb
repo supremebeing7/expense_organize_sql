@@ -43,6 +43,14 @@ describe Category do
 			test_category.save
 			test_category.id.should be_an_instance_of Fixnum
 		end
+
+		it 'only saves the category if it is not already present in the DB' do
+			test_category1 = Category.new({'name' => 'restaurants'})
+			test_category2 = Category.new({'name' => 'restaurants'})
+			test_category1.save
+			test_category2.save
+			test_category2.id.should eq test_category1.id
+		end
 	end
 
 	describe '.create' do

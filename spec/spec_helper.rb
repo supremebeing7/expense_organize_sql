@@ -2,6 +2,7 @@ require 'rspec'
 require 'pg'
 require 'expense'
 require 'category'
+require 'company'
 
 
 DB = PG.connect({:dbname => 'expenses_test'})

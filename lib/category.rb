@@ -10,8 +10,13 @@ class Category
 	end
 
 	def save
-		result = DB.exec("INSERT INTO categories (name) VALUES ('#{name}') RETURNING id")
-		@id = result.first['id'].to_i
+		category_results = DB.exec("SELECT * FROM categories WHERE name = '#{name}';")
+		if category_results.first == nil
+			result = DB.exec("INSERT INTO categories (name) VALUES ('#{name}') RETURNING id")
+			@id = result.first['id'].to_i
+		else
+			@id = category_results.first['id'].to_i
+		end
 	end
 
 	def self.all
