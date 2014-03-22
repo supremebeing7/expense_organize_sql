@@ -53,6 +53,20 @@ describe Category do
 		end
 	end
 
+	describe '#add_to_expenses_categories' do
+		it 'adds a category to an existing expense' do
+			test_expense = Expense.create({'description' => 'burger', 'amount' => 9.50, 'company_id' => 5})
+			test_category1 = Category.create({'name' => 'restaurants'})
+			test_category1.add_to_expenses_categories(test_expense)
+			results = DB.exec("SELECT * FROM categories
+		 					JOIN expenses_categories ON (categories.id = category_id)
+		 					JOIN expenses ON (expenses.id = expense_id)
+		 					WHERE expenses.id = #{test_expense.id}")
+			results.first['category_id'].to_i.should eq test_category1.id
+			results.first['expense_id'].to_i.should eq test_expense.id
+		end
+	end
+
 	describe '.create' do
 		it 'creates and saves a category to the database' do
 			test_category1 = Category.create({'name' => 'restaurants'})

@@ -19,6 +19,10 @@ class Category
 		end
 	end
 
+	def add_to_expenses_categories(new_expense)
+		result = DB.exec("INSERT INTO expenses_categories (expense_id, category_id) VALUES (#{new_expense.id}, #{self.id}) RETURNING id;")
+	end
+
 	def self.all
 		all_categories = []
 		results = DB.exec('SELECT * FROM categories;')

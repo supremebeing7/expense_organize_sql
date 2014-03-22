@@ -12,6 +12,6 @@ RSpec.configure do |config|
     DB.exec("DELETE FROM expenses *;")
     DB.exec("DELETE FROM categories *;")
     DB.exec("DELETE FROM companies *;")
-    DB.exec("DELETE FROM expenses_categories_companies *;")
+    DB.exec("DELETE FROM expenses_categories *;")
   end
 end
