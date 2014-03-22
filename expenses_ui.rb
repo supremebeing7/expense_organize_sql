@@ -99,6 +99,8 @@ def add_company
 end
 
 def show_expenses_by_category
+	system "clear"
+
 	main_menu
 end
 main_menu

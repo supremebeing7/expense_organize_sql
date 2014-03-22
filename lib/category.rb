@@ -35,4 +35,16 @@ class Category
 		new_category.save
 		new_category
 	end
+
+	def self.show_categorized_expenses
+		categorized_expenses = {}
+		results = DB.exec("SELECT * FROM categories
+		 					JOIN expenses_categories ON (categories.id = category_id)
+		 					JOIN expenses ON (expenses.id = expense_id)")
+		results.each do |result|
+			puts result
+			puts "******************"
+		end
+		# categorized_expenses = results.collect { |result| }
+	end
 end

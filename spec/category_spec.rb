@@ -70,8 +70,22 @@ describe Category do
 	describe '.create' do
 		it 'creates and saves a category to the database' do
 			test_category1 = Category.create({'name' => 'restaurants'})
-			test_category3 = Category.create({'name' => 'clothes'})
-			Category.all.should eq [test_category1, test_category3]
+			test_category2 = Category.create({'name' => 'clothes'})
+			Category.all.should eq [test_category1, test_category2]
+		end
+	end
+
+	describe '.show_categorized_expenses' do
+		it 'gives a list of all categories with expenses' do
+			test_expense1 = Expense.create({'description' => 'burger', 'amount' => 9.50, 'company_id' => 5})
+			test_expense2 = Expense.create({'description' => 'taco', 'amount' => 2.99, 'company_id' => 7})
+			test_expense3 = Expense.create({'description' => 'shoes', 'amount' => 25.85, 'company_id' => 9})
+			test_category1 = Category.create({'name' => 'restaurants'})
+			test_category2 = Category.create({'name' => 'clothes'})
+			test_category1.add_to_expenses_categories(test_expense1)
+			test_category1.add_to_expenses_categories(test_expense2)
+			test_category2.add_to_expenses_categories(test_expense3)
+			Category.show_categorized_expenses.should eq []
 		end
 	end
 end
