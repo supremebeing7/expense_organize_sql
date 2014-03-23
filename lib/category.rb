@@ -36,15 +36,19 @@ class Category
 		new_category
 	end
 
-	def self.show_categorized_expenses
-		categorized_expenses = {}
+	def show_categorized_expenses
+		categorized_expenses = []
 		results = DB.exec("SELECT * FROM categories
 		 					JOIN expenses_categories ON (categories.id = category_id)
-		 					JOIN expenses ON (expenses.id = expense_id)")
+		 					JOIN expenses ON (expenses.id = expense_id)
+		 					WHERE category_id = #{self.id}")
 		results.each do |result|
-			puts result
-			puts "******************"
+			hash = Hash.new
+			hash['id'] = result['id'].to_i
+			hash['description'] = result['description']
+			hash['amount'] = result['amount'].to_f
+			categorized_expenses << hash
 		end
-		# categorized_expenses = results.collect { |result| }
+		categorized_expenses
 	end
 end

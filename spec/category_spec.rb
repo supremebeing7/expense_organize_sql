@@ -75,7 +75,7 @@ describe Category do
 		end
 	end
 
-	describe '.show_categorized_expenses' do
+	describe '#show_categorized_expenses' do
 		it 'gives a list of all categories with expenses' do
 			test_expense1 = Expense.create({'description' => 'burger', 'amount' => 9.50, 'company_id' => 5})
 			test_expense2 = Expense.create({'description' => 'taco', 'amount' => 2.99, 'company_id' => 7})
@@ -84,8 +84,9 @@ describe Category do
 			test_category2 = Category.create({'name' => 'clothes'})
 			test_category1.add_to_expenses_categories(test_expense1)
 			test_category1.add_to_expenses_categories(test_expense2)
-			test_category2.add_to_expenses_categories(test_expense3)
-			Category.show_categorized_expenses.should eq []
+			test_category1.show_categorized_expenses.first['description'].should eq 'burger'
+			test_category1.show_categorized_expenses.first['amount'].should eq 9.50
 		end
 	end
 end
+

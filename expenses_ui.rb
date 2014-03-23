@@ -26,6 +26,7 @@ def main_menu
 	puts "'Com' - Add company"
 	puts "'Show' - Show expenses by category"
 	puts "'Del' - Delete all data"
+	puts "'Q' - Quit"
 	choice = gets.chomp.upcase
 	case choice
 	when 'EXP'
@@ -47,6 +48,9 @@ def main_menu
 		else
 			main_menu
 		end
+	when 'Q'
+		system 'clear'
+		puts "\n\tGoodbye\n\n"
 	else
 		puts "Invalid entry"
 		main_menu
@@ -100,7 +104,15 @@ end
 
 def show_expenses_by_category
 	system "clear"
-
+	Category.all.each_with_index do |category, index|
+		puts "#{index + 1}. #{category.name}"
+		category.show_categorized_expenses.each do |expense|
+			puts "\t$#{'%.2f' % expense['amount']} - #{expense['description']}"
+		end
+	end
+	puts "\n\nPress 'enter' to continue"
+	gets.chomp
 	main_menu
 end
+
 main_menu
