@@ -55,7 +55,7 @@ describe Category do
 
 	describe '#add_to_expenses_categories' do
 		it 'adds a category to an existing expense' do
-			test_expense = Expense.create({'description' => 'burger', 'amount' => 9.50, 'company_id' => 5})
+			test_expense = Expense.create({'description' => 'burger', 'amount' => 9.50, 'company_id' => 5, 'date' => '2014-09-09'})
 			test_category1 = Category.create({'name' => 'restaurants'})
 			test_category1.add_to_expenses_categories(test_expense)
 			results = DB.exec("SELECT * FROM categories
@@ -77,15 +77,29 @@ describe Category do
 
 	describe '#show_categorized_expenses' do
 		it 'gives a list of all categories with expenses' do
-			test_expense1 = Expense.create({'description' => 'burger', 'amount' => 9.50, 'company_id' => 5})
-			test_expense2 = Expense.create({'description' => 'taco', 'amount' => 2.99, 'company_id' => 7})
-			test_expense3 = Expense.create({'description' => 'shoes', 'amount' => 25.85, 'company_id' => 9})
+			test_expense1 = Expense.create({'description' => 'burger', 'amount' => 9.50, 'company_id' => 5, 'date' => '2014-09-09'})
+			test_expense2 = Expense.create({'description' => 'taco', 'amount' => 2.99, 'company_id' => 7, 'date' => '2014-08-07'})
+			test_expense3 = Expense.create({'description' => 'shoes', 'amount' => 25.85, 'company_id' => 9, 'date' => '2014-02-19'})
 			test_category1 = Category.create({'name' => 'restaurants'})
 			test_category2 = Category.create({'name' => 'clothes'})
 			test_category1.add_to_expenses_categories(test_expense1)
 			test_category1.add_to_expenses_categories(test_expense2)
 			test_category1.show_categorized_expenses.first['description'].should eq 'burger'
 			test_category1.show_categorized_expenses.first['amount'].should eq 9.50
+		end
+	end
+
+	describe '#show_percent_spent' do
+		it 'gives the percent of money spent in a given category' do
+			test_expense1 = Expense.create({'description' => 'burger', 'amount' => 9.50, 'company_id' => 5, 'date' => '2014-09-09'})
+			test_expense2 = Expense.create({'description' => 'taco', 'amount' => 2.99, 'company_id' => 7, 'date' => '2014-08-07'})
+			test_expense3 = Expense.create({'description' => 'shoes', 'amount' => 25.85, 'company_id' => 9, 'date' => '2014-02-19'})
+			test_category1 = Category.create({'name' => 'restaurants'})
+			test_category2 = Category.create({'name' => 'clothes'})
+			test_category1.add_to_expenses_categories(test_expense1)
+			test_category1.add_to_expenses_categories(test_expense2)
+			test_category2.add_to_expenses_categories(test_expense3)
+			test_category1.show_percent_spent.should eq 0.3257694314032342
 		end
 	end
 end

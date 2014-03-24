@@ -44,7 +44,10 @@ def main_menu
 			DB.exec("DELETE FROM expenses *;")
 		    DB.exec("DELETE FROM categories *;")
 		    DB.exec("DELETE FROM companies *;")
-		    DB.exec("DELETE FROM expenses_categories_companies *;")
+		    DB.exec("DELETE FROM expenses_categories *;")
+		    puts "DELETED"
+		    sleep(1.5)
+		    main_menu
 		else
 			main_menu
 		end
@@ -63,10 +66,12 @@ def add_expense
 	description = gets.chomp
 	puts "\nHow much did it cost?"
 	amount = gets.chomp.gsub(',','').to_f
+	puts "\nWhen did you purchase? (Format YYYY-MM-DD)"
+	date = gets.chomp
 	puts "\nFrom what company did you purchase?"
 	company_name = gets.chomp.capitalize
 	new_company = Company.create({'name' => company_name})
-	new_expense = Expense.create({'description' => description, 'amount' => amount, 'company_id' => new_company.id})
+	new_expense = Expense.create({'description' => description, 'amount' => amount, 'company_id' => new_company.id, 'date' => date})
 	add_category_to_expense(new_expense)
 	puts "Expense added!"
 	puts "#{new_expense.description} - $#{'%.2f' % new_expense.amount} - Company: #{new_company.name}"
@@ -89,8 +94,6 @@ def add_category_to_expense(new_expense)
 	case gets.chomp.upcase
 	when 'Y', 'YES'
 		add_category_to_expense(new_expense)
-	else
-		main_menu
 	end
 end
 
@@ -105,9 +108,10 @@ end
 def show_expenses_by_category
 	system "clear"
 	Category.all.each_with_index do |category, index|
-		puts "#{index + 1}. #{category.name}"
+		category_percent = '%.1f' % (category.show_percent_spent * 100)
+		puts "#{index + 1}. #{category.name}\t\tPercent of total: #{category_percent}%"
 		category.show_categorized_expenses.each do |expense|
-			puts "\t$#{'%.2f' % expense['amount']} - #{expense['description']}"
+			puts "\t#{expense['date']} - $#{'%.2f' % expense['amount']} - #{expense['description']}"
 		end
 	end
 	puts "\n\nPress 'enter' to continue"
